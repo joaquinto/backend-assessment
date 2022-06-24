@@ -1,0 +1,16 @@
+version: "3.2"
+services:
+  postgres:
+    image: postgres:10.5
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    networks:
+      - evolve-credit
+    ports:
+      - "${DB_PORT}:5432"
+networks:
+  evolve-credit:
+    driver: bridge
