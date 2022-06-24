@@ -40,6 +40,8 @@ COPY --from=builder /app/main ./seed/
 
 # ENV PATH="/usr/local/go/bin:${PATH}"
 
+EXPOSE $PORT
+
 
 #Command to run the executable
 CMD [ "./main" ]
