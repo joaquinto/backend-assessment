@@ -1,5 +1,6 @@
 # Start from golang base image
-FROM golang:buster as builder
+FROM golang:1.18 AS builder
+# FROM golang:buster as builder
 
 # Set the current working directory inside the container 
 WORKDIR /app
@@ -22,18 +23,20 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd
 RUN echo The old build end here 
 # Start a new stage from scratch
 # FROM alpine:latest
-FROM golang:buster
-# RUN apk --no-cache add ca-certificates
+# FROM golang:buster
+FROM alpine AS production
+RUN apk --no-cache add ca-certificates
+RUN apk --no-cache add curl
 
-WORKDIR /root/
+# WORKDIR /root/
 
 # Copy the Pre-built binary file from the previous stage.
 COPY --from=builder /usr/local/go/ /usr/local/go/
-COPY --from=builder /app/main .
-COPY --from=builder /app/prisma ./seed/prisma
-COPY --from=builder /app/go.mod ./seed/
-COPY --from=builder /app/go.sum ./seed/
-COPY --from=builder /app/main ./seed/
+COPY --from=builder /app .
+# COPY --from=builder /app/prisma ./seed/prisma
+# COPY --from=builder /app/go.mod ./seed/
+# COPY --from=builder /app/go.sum ./seed/
+# COPY --from=builder /app/main ./seed/
 # COPY --from=builder prisma.yaml .
 
 # RUN apk update && apk add go gcc bash musl-dev openssl-dev ca-certificates && update-ca-certificates
