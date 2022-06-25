@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"time"
 	"user/config"
+
 	"user/prisma/db"
 	"user/routes"
 
@@ -36,6 +37,9 @@ func main() {
 
 	c := jaegertracing.New(e, nil)
 	defer c.Close()
+
+	e.Use(echomiddleware.CORS())
+	e.Use(echomiddleware.Gzip())
 	// Log all requests
 	e.Use(echomiddleware.Logger())
 
